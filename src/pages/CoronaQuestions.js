@@ -15,7 +15,13 @@ class CoronaQuestions extends React.Component {
             </Card.Header>
             <Accordion.Collapse eventKey="1">
               <Card.Body>
-                Da das öffentliche Leben in Zeiten von COVID-19 deutlich eingeschränkt ist, kommen immer weniger Spender:innen in die Blutspendezentralen. Dennoch werden weiterhin täglich tausende Blutspenden benötigt. Viele Menschen sind angewiesen auf aktive Spender:innen und die Kliniken laufen Gefahr, nicht mehr genug Spenden zur Verfügung zu haben. Eine Blutspende zu leisten ist in Zeiten von Corona ein großer Beitrag zum Erhalt des Gesundheitswesens!
+                <p>
+                  Da das öffentliche Leben in Zeiten von COVID-19 deutlich eingeschränkt ist, kommen immer weniger Spender:innen in die Blutspendezentralen. Dennoch werden weiterhin täglich tausende Blutspenden benötigt. Viele Menschen sind angewiesen auf aktive Spender:innen und die Kliniken laufen Gefahr, nicht mehr genug Spenden zur Verfügung zu haben. Eine Blutspende zu leisten ist in Zeiten von Corona ein großer Beitrag zum Erhalt des Gesundheitswesens!
+                </p>
+                
+                <p>
+                  Darüber hinaus werden Blutspenden auch zur Erforschung und Bekämpfung des SARS-CoV-2-Virus' benötigt. <a href="https://www.zeit.de/wissen/gesundheit/2020-03/christian-drosten-coronavirus-pandemie-deutschland-virologe-charite/seite-3">Im Interview mit der Zeit berichtete Christian Drosten kürzlich,</a> dass in Italien Plasmaspenden von Menschen, die von COVID-19 geheilt sind, zur Behandlung von Infizierten verwendet werden sollen. <!-- Menschen, die bereits genesen sind, haben Antikörper im Blutplasma, durch die sie vermutlich gegen das Virus immun sind. --> Dass Blutspenden von allen Menschen von großem Nutzen für epidemiologische Studien sein können, hat er zudem <a href="https://www.ndr.de/nachrichten/info/podcast4684.html">im Podcast mit dem NDR "Das Coronavirus-Update mit Christian Drosten"</a> bereits mehrfach erwähnt. Die Forschung, die mit Blutspenden betrieben wird, trägt somit ebenfalls zur Bekämpfung des Virus' bei.
+                </p>
               </Card.Body>
             </Accordion.Collapse>
           </Card>
