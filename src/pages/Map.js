@@ -5,8 +5,6 @@ import ReactDOM from 'react-dom';
 import { Button, Col, Row } from 'react-bootstrap';
 import MapLegend from "../MapLegend";
 
-const MARKERS = require('../data.json');
-
 function makeAppointment(name) {
   alert(name);
 }
@@ -16,7 +14,9 @@ class Map extends React.Component {
 
   state = {
     showRequestAppointmentDialog: false,
-    selectedPlace: null
+    selectedPlace: null,
+    map: null,
+    maps: null
   };
 
   static defaultProps = {
@@ -24,26 +24,29 @@ class Map extends React.Component {
       lat: 51.372733,
       lng: 10.279336
     },
+    markers: [],
     zoom: 6
   };
-
-
-
-  showCurrentLocation = () => {
-
-  }
-
-
-  componentDidMount() {
-    this.showCurrentLocation()
-  }
 
   getColor = (place) => {
     var colors = ["rot", "gelb", "gruen"];
     return colors[Math.floor(Math.random() * 3)];
   }
 
-  handleApiLoaded = (map, maps, places) => {
+  handleApiLoaded = (map, maps) => {
+    const controlButtonDiv = document.createElement('div');
+    ReactDOM.render(
+      <MapLegend />,
+      controlButtonDiv);
+    map.controls[maps.ControlPosition.TOP_LEFT].push(controlButtonDiv);
+
+    this.setState({
+      map: map,
+      maps: maps
+    });
+  }
+
+  renderMap = (map, maps) => {
     const markers = [];
     this.infowindow = new maps.InfoWindow({ content: '<div id="infowindow">test</div>' });
 
@@ -56,10 +59,9 @@ class Map extends React.Component {
 
     maps.event.addListener(this.infowindow, 'domready', this.renderInfoWindow);
 
-
-    places.forEach((place) => {
-      var latitude = place.Latitude;
-      var longitude = place.Longitude;
+    this.props.markers.forEach((place) => {
+      var latitude = parseFloat(place.lat);
+      var longitude = parseFloat(place.lon);
       var color = this.getColor(place);
 
       var marker = new maps.Marker({
@@ -85,15 +87,10 @@ class Map extends React.Component {
 
     markers.forEach((marker, i) => {
       marker.addListener('click', () => {
-        this.showInfoWindow(map, marker, places[i]);
+        this.showInfoWindow(map, marker, this.props.markers[i]);
       });
     });
 
-    const controlButtonDiv = document.createElement('div');
-    ReactDOM.render(
-      <MapLegend />,
-      controlButtonDiv);
-    map.controls[maps.ControlPosition.TOP_LEFT].push(controlButtonDiv);
   }
 
   showInfoWindow = (map, marker, place) => {
@@ -115,23 +112,23 @@ class Map extends React.Component {
     var url = null;
 
     try {
-      url = new URL(place.Website);
+      url = new URL(place.url);
     } catch (e) { }
 
     ReactDOM.render((
       <div>
         <div style={{"font-size": "14pt"}}>
-          {place.Name}
+          {place.name}
         </div>
         <div style={{"font-size": "12pt"}}>
-          {place.Adresse}
+          {place.address}
         </div>
         <div style={{"font-size": "12pt"}}>
-          {place.PLZ} {place.Ort}
+          {place.zip} {place.city}
         </div>
         <br />
-        {place.Telefon && (<div style={{"font-size": "12pt"}}>
-          <b>Telefon: </b> <a href={"tel:" + place.Telefon}>{place.Telefon}</a>
+        {place.phone && (<div style={{"font-size": "12pt"}}>
+          <b>Telefon: </b> <a href={"tel:" + place.phone}>{place.phone}</a>
         </div>)}
         {url && (<div style={{"font-size": "12pt"}}>
           <b>Web:</b> <a href={url}>{url.hostname}</a>
@@ -147,18 +144,23 @@ class Map extends React.Component {
 
 
   render () {
+    if (this.state.map) {
+      this.renderMap(this.state.map, this.state.maps);
+    }
+
     return (
       <div style={{ height: '90vh', width: '100%' }}>
         <RequestAppointmentDialog
           show={this.state.showRequestAppointmentDialog}
           onClose={() => this.showRequestAppointmentDialog(false)}
+          id={this.state.selectedPlace ? this.state.selectedPlace.id : 'nichts'}
         />
         <GoogleMapReact
           bootstrapURLKeys={{ key: 'AIzaSyDwjSllCXFltaD1GG6z0svfURl1cHaSzv8' }}
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
           yesIWantToUseGoogleMapApiInternals
-          onGoogleApiLoaded={({ map, maps }) => this.handleApiLoaded(map, maps, MARKERS)}
+          onGoogleApiLoaded={({ map, maps }) => this.handleApiLoaded(map, maps)}
         >
 
         </GoogleMapReact>

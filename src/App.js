@@ -17,36 +17,60 @@ import {
   Map
 } from './pages';
 
-function App() {
-  return (
-    <div className="App">
-      <Router>
-        <MenuBar />
-        <div className="content">
-          <Switch>
-            <Route path="/list">
-              <NotImplementedYet />
-            </Route>
-            <Route path="/faq">
-              <FrequentlyAskedQuestions />
-            </Route>
-            <Route path="/corona">
-              <CoronaQuestions />
-            </Route>
-            <Route path="/datenschutz">
-              <Privacy />
-            </Route>
-            <Route path="/impressum">
-              <Imprint />
-            </Route>
-            <Route path="/">
-              <Map />
-            </Route>
-          </Switch>
-        </div>
-      </Router>
-    </div>
-  );
+
+var markers = [];
+
+
+class App extends React.Component {
+  componentWillMount() {
+    this.fetchData();
+    this.state = {
+      markers: []
+    }
+  }
+
+  fetchData() {
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', () => {
+      this.setState({
+        markers: JSON.parse(xhr.responseText)
+      })
+    });
+    xhr.open('GET', 'https://blutspendekarte.de/backend/bloodDonorCentre/getAll');
+    xhr.send()
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <Router>
+          <MenuBar />
+          <div className="content">
+            <Switch>
+              <Route path="/list">
+                <NotImplementedYet />
+              </Route>
+              <Route path="/faq">
+                <FrequentlyAskedQuestions />
+              </Route>
+              <Route path="/corona">
+                <CoronaQuestions />
+              </Route>
+              <Route path="/datenschutz">
+                <Privacy />
+              </Route>
+              <Route path="/impressum">
+                <Imprint />
+              </Route>
+              <Route path="/">
+                <Map markers={this.state.markers} />
+              </Route>
+            </Switch>
+          </div>
+        </Router>
+      </div>
+    );
+  }
 }
 
 export default App;
