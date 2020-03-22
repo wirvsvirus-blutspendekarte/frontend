@@ -1,16 +1,9 @@
 import React from 'react';
 import GoogleMapReact from 'google-map-react'
-import LatLng from 'google-map-react';
 import RequestAppointmentDialog from "../RequestAppointmentDialog";
 import ReactDOM from 'react-dom';
-import ReactDOMServer from 'react-dom/server';
-
-import { Button } from 'react-bootstrap';
-
-var infowindow;
-
-// Refer to https://github.com/google-map-react/google-map-react#use-google-maps-api
-
+import { Button, Col, Row } from 'react-bootstrap';
+import MapLegend from "../MapLegend";
 
 const MARKERS = require('../data.json');
 
@@ -19,9 +12,11 @@ function makeAppointment(name) {
 }
 
 class Map extends React.Component {
+  infowindow = null;
+
   state = {
     showRequestAppointmentDialog: false,
-    selectedPlace: null,
+    selectedPlace: null
   };
 
   static defaultProps = {
@@ -44,27 +39,22 @@ class Map extends React.Component {
   }
 
   getColor = (place) => {
-    var colors = ["red", "green", "yellow"];
+    var colors = ["rot", "gelb", "gruen"];
     return colors[Math.floor(Math.random() * 3)];
   }
 
   handleApiLoaded = (map, maps, places) => {
     const markers = [];
-    infowindow = new maps.InfoWindow({ content: '<div id="infowindow">test</div>' });
+    this.infowindow = new maps.InfoWindow({ content: '<div id="infowindow">test</div>' });
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        console.log(position);
         map.setCenter(new maps.LatLng(position.coords.latitude, position.coords.longitude));
         map.setZoom(14);
       });
     }
 
-    maps.event.addListener(infowindow, 'closeclick', function() {
-      console.log('closeclick');
-    });
-
-    maps.event.addListener(infowindow, 'domready', this.renderInfoWindow);
+    maps.event.addListener(this.infowindow, 'domready', this.renderInfoWindow);
 
 
     places.forEach((place) => {
@@ -79,33 +69,38 @@ class Map extends React.Component {
         },
         map: map,
         icon: {
-          url: "http://maps.google.com/mapfiles/ms/icons/" + color  + "-dot.png"
+          url: "tropfen_" + color  + ".png",
+          // This marker is 20 pixels wide by 32 pixels high.
+          size: new maps.Size(18, 30),
+          // The origin for this image is (0, 0).
+          origin: new maps.Point(0, 0),
+          // The anchor for this image is the base of the flagpole at (0, 32).
+          anchor: new maps.Point(9, 0)
         }
       });
       markers.push(marker);
-
-
     });
 
-      markers.forEach((marker, i) => {
-        marker.addListener('click', () => {
-          this.showInfoWindow(map, marker, places[i]);
-        });
+
+
+    markers.forEach((marker, i) => {
+      marker.addListener('click', () => {
+        this.showInfoWindow(map, marker, places[i]);
       });
+    });
 
-
-  }
-
-  click = () => {
-    console.log('click');
+    const controlButtonDiv = document.createElement('div');
+    ReactDOM.render(
+      <MapLegend />,
+      controlButtonDiv);
+    map.controls[maps.ControlPosition.TOP_LEFT].push(controlButtonDiv);
   }
 
   showInfoWindow = (map, marker, place) => {
     this.setState({
       selectedPlace: place
     }, function() {
-      infowindow.open(map, marker);
-      //this.renderInfoWindow(place);
+      this.infowindow.open(map, marker);
     });
   }
 
@@ -165,6 +160,7 @@ class Map extends React.Component {
           yesIWantToUseGoogleMapApiInternals
           onGoogleApiLoaded={({ map, maps }) => this.handleApiLoaded(map, maps, MARKERS)}
         >
+
         </GoogleMapReact>
       </div>
     )

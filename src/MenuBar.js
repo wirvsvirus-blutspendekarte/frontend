@@ -28,7 +28,6 @@ class MenuBar extends React.Component {
         <Navbar.Brand href="#home"></Navbar.Brand>
         <Nav className="mr-auto">
           <Nav.Link as={Link} to="/">Karte</Nav.Link>
-          <Nav.Link as={Link} to="/list">Liste</Nav.Link>
           <Nav.Link as={Link} to="/corona">Corona-FAQ</Nav.Link>
           <Nav.Link as={Link} to="/faq">Allgemeine FAQ</Nav.Link>
           <Nav.Link as={Link} to="/datenschutz">Datenschutzerklärung</Nav.Link>
