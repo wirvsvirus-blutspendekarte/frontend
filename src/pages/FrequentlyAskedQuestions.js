@@ -4,7 +4,7 @@ import { Card, Accordion, Button } from "react-bootstrap";
 class FrequentlyAskedQuestions extends React.Component {
   render() {
     return (
-      <div style={{"padding": "20px"}}>
+      <div className={"text-content"}>
         <h1>Häufig gestellte Fragen</h1>
         <Accordion>
           <Card>

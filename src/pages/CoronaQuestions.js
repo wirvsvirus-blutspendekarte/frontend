@@ -4,7 +4,7 @@ import { Card, Accordion, Button } from "react-bootstrap";
 class CoronaQuestions extends React.Component {
   render() {
     return (
-      <div style={{"padding": "20px"}}>
+      <div className={"text-content"}>
         <h1>Corona-Informationen</h1>
         <Accordion>
           <Card>

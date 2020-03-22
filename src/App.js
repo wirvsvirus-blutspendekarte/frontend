@@ -2,16 +2,22 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import MenuBar from './MenuBar';
-import NotImplementedYet from './NotImplementedYet';
-import Map from './Map';
+
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link
 } from "react-router-dom";
-import FrequentlyAskedQuestions from "./FrequentlyAskedQuestions";
-import CoronaQuestions from "./CoronaQuestions";
+
+import {
+  FrequentlyAskedQuestions,
+  CoronaQuestions,
+  Privacy,
+  Imprint,
+  NotImplementedYet,
+  Map
+} from './pages';
 
 function App() {
   return (
@@ -30,10 +36,10 @@ function App() {
               <CoronaQuestions />
             </Route>
             <Route path="/datenschutz">
-              <NotImplementedYet />
+              <Privacy />
             </Route>
             <Route path="/impressum">
-              <NotImplementedYet />
+              <Imprint />
             </Route>
             <Route path="/">
               <Map />

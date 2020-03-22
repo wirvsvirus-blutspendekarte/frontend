@@ -15,3 +15,23 @@ code {
 .content {
   text-align: left;
 }
+
+
+.text-content {
+  padding: 30px;
+}
+
+h1 {
+  font-size: 18pt !important;
+  font-weight: bold !important;
+}
+
+h2 {
+  font-size: 16pt !important;
+  font-weight: bold !important;
+}
+
+h3 {
+  font-size: 14pt !important;
+  font-weight: bold !important;
+}

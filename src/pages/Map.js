@@ -1,7 +1,7 @@
 import React from 'react';
 import GoogleMapReact from 'google-map-react'
 import LatLng from 'google-map-react';
-import RequestAppointmentDialog from "./RequestAppointmentDialog";
+import RequestAppointmentDialog from "../RequestAppointmentDialog";
 import ReactDOM from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
 
@@ -12,7 +12,7 @@ var infowindow;
 // Refer to https://github.com/google-map-react/google-map-react#use-google-maps-api
 
 
-const MARKERS = require('./data.json');
+const MARKERS = require('../data.json');
 
 function makeAppointment(name) {
   alert(name);

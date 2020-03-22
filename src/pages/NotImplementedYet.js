@@ -4,7 +4,10 @@ class NotImplementedYet extends React.Component {
 
   render () {
     return (
-      <span>Gedulde dich, hier ist noch nichts.</span>
+      <div className={"text-content"}>
+        <h1>Bitte warten ...</h1>
+        <span>Gedulde dich, hier ist noch nichts.</span>
+      </div>
     )
   }
 }
