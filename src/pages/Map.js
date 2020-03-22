@@ -79,7 +79,7 @@ class Map extends React.Component {
         },
         map: map,
         icon: {
-          url: "http://maps.google.com/mapfiles/ms/icons/" + color  + "-dot.png"
+          url: "https://maps.google.com/mapfiles/ms/icons/" + color  + "-dot.png"
         }
       });
       markers.push(marker);
