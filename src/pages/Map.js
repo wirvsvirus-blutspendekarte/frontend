@@ -35,18 +35,17 @@ class Map extends React.Component {
   }
 
   componentDidUpdate = (prevProps, prevState, snapshot) => {
-    console.log('jaaa#');
     var infowindow = this.infowindow;
     var map = this.state.map;
     var state = this.state;
-    if (this.props.selectedPlace !== this.state.selectedPlace) {
+    if (this.props.selectedPlace !== prevProps.selectedPlace) {
       this.setState({
         selectedPlace: this.props.selectedPlace
+      }, function () {
+        var marker = this.state.markers.find(marker => (marker.id == this.state.selectedPlace.id));
+        map.setCenter(marker.position);
+        infowindow.open(map, marker);
       });
-
-      var marker = this.state.markers.find(marker => (marker.id == this.props.selectedPlace.id));
-      map.setCenter(marker.position);
-      infowindow.open(map, marker);
     }
   }
 
