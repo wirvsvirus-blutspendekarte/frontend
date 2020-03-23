@@ -9,9 +9,37 @@ import {
   Link,
   BrowserRouter as Router
 } from "react-router-dom";
+import {Dropdown, DropdownItem} from "react-bootstrap";
 
 class MenuBar extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      searchResults: []
+    }
+  }
 
+  handleSearchChange = (e) => {
+    var query = e.target.value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', () => {
+      this.setState({
+        searchResults: JSON.parse(xhr.responseText)
+      });
+    });
+    xhr.open('GET', 'https://blutspendekarte.de/backend/bloodDonorCentre/getMatching?q=' + encodeURIComponent(query));
+    xhr.send()
+  }
+
+  onSearchClick = (item) => {
+    this.setState({
+      searchResults: []
+    });
+    if (this.props.onSearchClick) {
+      this.props.onSearchClick(item);
+    }
+  }
   render() {
     return (
       <Navbar bg="dark" variant="dark">
@@ -35,8 +63,16 @@ class MenuBar extends React.Component {
 
         </Nav>
         <Form inline>
-          <FormControl type="text" placeholder="Suche" className="mr-sm-2" />
-          <Button variant="outline-info">Suche</Button>
+          <Dropdown show={this.state.searchResults.length>0}>
+            <FormControl type="text" placeholder="Suche" onChange={this.handleSearchChange}  className="mr-sm-2" />
+
+
+            <Dropdown.Menu alignRight>
+              {this.state.searchResults.map(item => (
+                <DropdownItem onSelect={() => this.onSearchClick(item)} key={item.id}>{item.name}</DropdownItem>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
         </Form>
       </Navbar>
     )

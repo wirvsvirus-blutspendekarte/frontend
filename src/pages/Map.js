@@ -34,6 +34,22 @@ class Map extends React.Component {
     return colors[Math.floor(Math.random() * 3)];
   }
 
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
+    console.log('jaaa#');
+    var infowindow = this.infowindow;
+    var map = this.state.map;
+    var state = this.state;
+    if (this.props.selectedPlace !== this.state.selectedPlace) {
+      this.setState({
+        selectedPlace: this.props.selectedPlace
+      });
+
+      var marker = this.state.markers.find(marker => (marker.id == this.props.selectedPlace.id));
+      map.setCenter(marker.position);
+      infowindow.open(map, marker);
+    }
+  }
+
   handleApiLoaded = (map, maps) => {
     const controlButtonDiv = document.createElement('div');
     ReactDOM.render(
@@ -72,6 +88,7 @@ class Map extends React.Component {
       var color = this.getColor(place);
 
       var marker = new maps.Marker({
+        id: place.id,
         position: {
           lat: latitude,
           lng: longitude,

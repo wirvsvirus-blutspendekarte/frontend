@@ -22,11 +22,19 @@ var markers = [];
 
 
 class App extends React.Component {
+
   componentWillMount() {
     this.fetchData();
     this.state = {
-      markers: []
+      markers: [],
+      selectedPlace: null
     }
+  }
+
+  onSearchClick = (item) => {
+    this.setState({
+      selectedPlace: item
+    });
   }
 
   fetchData() {
@@ -44,7 +52,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <Router>
-          <MenuBar />
+          <MenuBar onSearchClick={this.onSearchClick} />
           <div className="content">
             <Switch>
               <Route path="/list">
@@ -63,7 +71,7 @@ class App extends React.Component {
                 <Imprint />
               </Route>
               <Route path="/">
-                <Map markers={this.state.markers} />
+                <Map markers={this.state.markers} selectedPlace={this.state.selectedPlace} />
               </Route>
             </Switch>
           </div>
