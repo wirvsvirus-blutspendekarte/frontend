@@ -42,8 +42,8 @@ class MenuBar extends React.Component {
   }
   render() {
     return (
-      <Navbar bg="dark" variant="dark">
-        <Navbar.Brand href="#home">
+      <Navbar  collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar.Brand href="/">
           <img
             alt=""
             src="/logo.png"
@@ -51,29 +51,39 @@ class MenuBar extends React.Component {
             style={{marginTop: "-10px", marginBottom: "-20px"}}
             className="d-inline-block align-top"
           />{' '}
-          juFORUM-Blutspendekarte
+          Blutspendekarte
         </Navbar.Brand>
-        <Navbar.Brand href="#home"></Navbar.Brand>
-        <Nav className="mr-auto">
-          <Nav.Link as={Link} to="/">Karte</Nav.Link>
-          <Nav.Link as={Link} to="/corona">Corona-FAQ</Nav.Link>
-          <Nav.Link as={Link} to="/faq">Allgemeine FAQ</Nav.Link>
-          <Nav.Link as={Link} to="/datenschutz">Datenschutzerklärung</Nav.Link>
-          <Nav.Link as={Link} to="/impressum">Impressum</Nav.Link>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" style={{float: "right"}}/>
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto text-lg-center text-left">
+            <Nav.Link as={Link} to="/">Karte</Nav.Link>
+            <Nav.Link as={Link} to="/corona">Corona-FAQ</Nav.Link>
+            <Nav.Link as={Link} to="/faq">Allgemeine FAQ</Nav.Link>
+            <Nav.Link as={Link} to="/datenschutz">Datenschutzerklärung</Nav.Link>
+            <Nav.Link as={Link} to="/impressum">Impressum</Nav.Link>
 
-        </Nav>
-        <Form inline>
-          <Dropdown show={this.state.searchResults.length>0}>
-            <FormControl type="text" placeholder="Suche" onChange={this.handleSearchChange}  className="mr-sm-2" />
+          </Nav>
+          <Form inline>
+            <Dropdown show={this.state.searchResults.length>0}>
+              <FormControl type="text" placeholder="Suche" onChange={this.handleSearchChange}  className="mr-sm-2" />
 
-
-            <Dropdown.Menu alignRight>
-              {this.state.searchResults.map(item => (
-                <DropdownItem onSelect={() => this.onSearchClick(item)} key={item.id}>{item.name}</DropdownItem>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        </Form>
+              <div className="d-none d-lg-block">
+                <Dropdown.Menu alignRight>
+                  {this.state.searchResults.map(item => (
+                    <DropdownItem onSelect={() => this.onSearchClick(item)} key={item.id}>{item.name}</DropdownItem>
+                  ))}
+                </Dropdown.Menu>
+              </div>
+              <div className="d-block d-lg-none">
+                <Dropdown.Menu>
+                  {this.state.searchResults.map(item => (
+                    <DropdownItem onSelect={() => this.onSearchClick(item)} key={item.id}>{item.name}</DropdownItem>
+                  ))}
+                </Dropdown.Menu>
+              </div>
+            </Dropdown>
+          </Form>
+        </Navbar.Collapse>
       </Navbar>
     )
   }

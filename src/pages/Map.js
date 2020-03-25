@@ -17,7 +17,8 @@ class Map extends React.Component {
     selectedPlace: null,
     map: null,
     maps: null,
-    markers: null
+    markers: null,
+    height: 0
   };
 
   static defaultProps = {
@@ -32,7 +33,20 @@ class Map extends React.Component {
   getColor = (place) => {
     var colors = ["rot", "gelb", "gruen"];
     return colors[Math.floor(Math.random() * 3)];
-  }
+  };
+
+  updateDimensions = () => {
+    this.setState({ height: window.innerHeight });
+  };
+
+  componentDidMount = () => {
+    window.addEventListener('resize', this.updateDimensions);
+    this.updateDimensions();
+  };
+
+  componentWillUnmount = () => {
+    window.removeEventListener('resize', this.updateDimensions);
+  };
 
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     var infowindow = this.infowindow;
@@ -167,7 +181,7 @@ class Map extends React.Component {
     this.renderMap();
 
     return (
-      <div style={{ height: '90vh', width: '100%' }}>
+      <div style={{ height: this.state.height - 56, width: '100%' }}>
         <RequestAppointmentDialog
           show={this.state.showRequestAppointmentDialog}
           onClose={() => this.showRequestAppointmentDialog(false)}
