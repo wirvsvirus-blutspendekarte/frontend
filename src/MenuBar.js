@@ -51,7 +51,12 @@ class MenuBar extends React.Component {
             style={{marginTop: "-10px", marginBottom: "-20px"}}
             className="d-inline-block align-top"
           />{' '}
-          Blutspendekarte
+          <div className={"d-inline d-lg-none"}>
+            Blutspendekarte
+          </div>
+          <div className={"d-none d-lg-inline"}>
+            juFORUM-Blutspendekarte
+          </div>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" style={{float: "right"}}/>
         <Navbar.Collapse id="responsive-navbar-nav">

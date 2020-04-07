@@ -16,6 +16,8 @@ import {
   NotImplementedYet,
   Map
 } from './pages';
+import {Modal} from "react-bootstrap";
+import Button from "react-bootstrap/Button";
 
 
 var markers = [];
@@ -27,7 +29,8 @@ class App extends React.Component {
     this.fetchData();
     this.state = {
       markers: [],
-      selectedPlace: null
+      selectedPlace: null,
+      modalIsOpen: true
     }
   }
 
@@ -54,6 +57,19 @@ class App extends React.Component {
         <Router>
           <MenuBar onSearchClick={this.onSearchClick} />
           <div className="content">
+            <Modal centered show={this.state.modalIsOpen} onHide={() => this.setState({ modalIsOpen: false })}>
+              <Modal.Header closeButton>
+                <Modal.Title>Achtung: Beispieldaten!</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <b>Bei der Blutspendekarte handelt es sich noch um einen Prototypen!</b> Die angezeigten Livedaten müssen weder vollständig
+                noch korrekt sein, wir arbeiten aber mit Hochdruck daran. Fragen zu den Öffnungszeiten und der aktuellen Auslastung
+                beantworten die meisten Blutspendezentren gerne telefonisch.
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant={"primary"} onClick={() => this.setState({ modalIsOpen: false })}>Bestätigen</Button>
+              </Modal.Footer>
+            </Modal>
             <Switch>
               <Route path="/list">
                 <NotImplementedYet />
