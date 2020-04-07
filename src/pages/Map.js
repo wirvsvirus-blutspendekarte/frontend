@@ -16,7 +16,9 @@ class Map extends React.Component {
     showRequestAppointmentDialog: false,
     selectedPlace: null,
     map: null,
-    maps: null
+    maps: null,
+    markers: null,
+    height: 0
   };
 
   static defaultProps = {
@@ -31,6 +33,34 @@ class Map extends React.Component {
   getColor = (place) => {
     var colors = ["rot", "gelb", "gruen"];
     return colors[Math.floor(Math.random() * 3)];
+  };
+
+  updateDimensions = () => {
+    this.setState({ height: window.innerHeight });
+  };
+
+  componentDidMount = () => {
+    window.addEventListener('resize', this.updateDimensions);
+    this.updateDimensions();
+  };
+
+  componentWillUnmount = () => {
+    window.removeEventListener('resize', this.updateDimensions);
+  };
+
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
+    var infowindow = this.infowindow;
+    var map = this.state.map;
+    var state = this.state;
+    if (this.props.selectedPlace !== prevProps.selectedPlace) {
+      this.setState({
+        selectedPlace: this.props.selectedPlace
+      }, function () {
+        var marker = this.state.markers.find(marker => (marker.id == this.state.selectedPlace.id));
+        map.setCenter(marker.position);
+        infowindow.open(map, marker);
+      });
+    }
   }
 
   handleApiLoaded = (map, maps) => {
@@ -40,15 +70,8 @@ class Map extends React.Component {
       controlButtonDiv);
     map.controls[maps.ControlPosition.TOP_LEFT].push(controlButtonDiv);
 
-    this.setState({
-      map: map,
-      maps: maps
-    });
-  }
-
-  renderMap = (map, maps) => {
-    const markers = [];
-    this.infowindow = new maps.InfoWindow({ content: '<div id="infowindow">test</div>' });
+    this.infowindow = new maps.InfoWindow({ content: '<div id="infowindow"></div>' });
+    maps.event.addListener(this.infowindow, 'domready', this.renderInfoWindow);
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -57,7 +80,20 @@ class Map extends React.Component {
       });
     }
 
-    maps.event.addListener(this.infowindow, 'domready', this.renderInfoWindow);
+    this.setState({
+      map: map,
+      maps: maps
+    }, this.renderMap);
+  }
+
+  renderMap = () => {
+    var map = this.state.map;
+    var maps = this.state.maps;
+
+    if (!map || !maps)
+      return;
+
+    this.state.markers = [];
 
     this.props.markers.forEach((place) => {
       var latitude = parseFloat(place.lat);
@@ -65,6 +101,7 @@ class Map extends React.Component {
       var color = this.getColor(place);
 
       var marker = new maps.Marker({
+        id: place.id,
         position: {
           lat: latitude,
           lng: longitude,
@@ -72,20 +109,17 @@ class Map extends React.Component {
         map: map,
         icon: {
           url: "tropfen_" + color  + ".png",
-          // This marker is 20 pixels wide by 32 pixels high.
           size: new maps.Size(18, 30),
-          // The origin for this image is (0, 0).
           origin: new maps.Point(0, 0),
-          // The anchor for this image is the base of the flagpole at (0, 32).
           anchor: new maps.Point(9, 0)
         }
       });
-      markers.push(marker);
+      this.state.markers.push(marker);
     });
 
 
 
-    markers.forEach((marker, i) => {
+    this.state.markers.forEach((marker, i) => {
       marker.addListener('click', () => {
         this.showInfoWindow(map, marker, this.props.markers[i]);
       });
@@ -144,12 +178,10 @@ class Map extends React.Component {
 
 
   render () {
-    if (this.state.map) {
-      this.renderMap(this.state.map, this.state.maps);
-    }
+    this.renderMap();
 
     return (
-      <div style={{ height: '90vh', width: '100%' }}>
+      <div style={{ height: this.state.height - 56, width: '100%' }}>
         <RequestAppointmentDialog
           show={this.state.showRequestAppointmentDialog}
           onClose={() => this.showRequestAppointmentDialog(false)}
